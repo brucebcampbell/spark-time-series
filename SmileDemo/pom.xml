@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.aloidia.datascience</groupId>
+  <artifactId>SmileDemo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>SmileDemo</name>
+  <description></description>
+  <inceptionYear>2016</inceptionYear>
+
+
+  <properties>
+    <smile.version>1.2.0</smile.version>
+    <spark.version>2.0.0</spark.version>
+    <java.version>1.7</java.version>
+    <maven.version>3.3.9</maven.version>
+    <sbt.project.name>spark</sbt.project.name>
+    <log4j.version>1.2.17</log4j.version>
+    <parquet.version>1.7.0</parquet.version>
+    <avro.version>1.7.7</avro.version>
+    <scala.version>2.11.8</scala.version>
+    <scala.binary.version>2.11</scala.binary.version>
+    <scala.tools.version>2.11</scala.tools.version>
+    <netlib.java.version>1.1.2</netlib.java.version>
+    <commons-codec.version>1.10</commons-codec.version>
+    <commons-io.version>2.4</commons-io.version>
+    <commons-lang2.version>2.6</commons-lang2.version>
+    <commons-lang3.version>3.3.2</commons-lang3.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.haifengl</groupId>
+      <artifactId>smile-core</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <!-- Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+    </dependency>
+    <dependency>
+      <groupId>com.aloidia.datascience</groupId>
+      <artifactId>TSFeatures</artifactId>
+      <version>0.0.1</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/../TSFeatures/target/TSFeatures-0.0.1.jar</systemPath>
+    </dependency>
+    
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.2</version>
+        <configuration>
+         <filters>
+          <filter>
+            <artifact>*:*</artifact>
+            <excludes>
+              <exclude>META-INF/*.SF</exclude>
+              <exclude>META-INF/*.DSA</exclude>
+              <exclude>META-INF/*.RSA</exclude>
+            </excludes>
+          </filter>
+        </filters>
+      </configuration>
+      <executions>
+        <execution>
+          <phase>package</phase>
+          <goals>
+            <goal>shade</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <version>2.18.1</version>
+      <configuration>
+        <useFile>false</useFile>
+        <disableXmlReport>true</disableXmlReport>
+        <!-- If you have classpath issue like NoDefClassError,... -->
+        <!-- useManifestOnlyJar>false</useManifestOnlyJar -->
+        <includes>
+          <include>**/*Test.*</include>
+          <include>**/*Suite.*</include>
+        </includes>
+      </configuration>
+    </plugin>
+
+  </plugins>
+</build>
+</project>

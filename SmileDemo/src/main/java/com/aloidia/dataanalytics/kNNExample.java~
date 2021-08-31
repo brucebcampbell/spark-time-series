@@ -1,0 +1,21 @@
+package com.aloidia.datascience.SmileDemo;
+
+import smile.data.NominalAttribute;
+import java.text.ParseException;
+import smile.data.parser.DelimitedTextParser;
+import smile.data.AttributeDataset;
+import smile.data.parser.ArffParser;
+import java.io.IOException;
+
+
+public class kNNExample {
+  
+	private final static Logger log = Logger
+			.getLogger(kNNExample.class);
+
+
+	public static void main(String[] args) {
+			
+		log.info("Starting KNNExample Main");
+}
+}

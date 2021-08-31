@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+  <!-- <parent>
+    <groupId>com.aloidia</groupId>
+    <artifactId>datascience</artifactId>
+    <version>0.0.1</version>
+  </parent>
+-->
+<!--  Include this in childeren
+ <parent>
+    <groupId>com.aloidia.datascience</groupId>
+    <artifactId>tse-parent_0.0.1</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+-->
+<groupId>com.aloidia.datascience</groupId>
+<artifactId>tse-parent_0.0.1</artifactId>
+<version>0.0.1</version>
+<packaging>pom</packaging>
+<name>TSE Project Parent POM</name>
+<url></url>
+<scm>
+  <!-- bbcrevisit -->
+  <connection>scm:git:git@github.com:bruce-campbell-aloidia/timeSeriesEngine.git</connection>
+  <url>scm:git:git@github.com:bruce-campbell-aloidia/timeSeriesEngine.git</url>
+  <tag>HEAD</tag>
+</scm>
+<developers>
+  <developer>
+    <id>brucebcampbell</id>
+    <name>Bruce B  Campbell</name>
+    <email>bruce.campbell@aloidia.com</email>
+    <url>http://brucebcampbell.github.io</url>
+    <organization>aloidia, USA</organization>
+    <organizationUrl></organizationUrl>
+  </developer>
+</developers>
+<issueManagement>
+  <system>JIRA</system>
+  <url>https://verdeeco.atlassian.net/browse/TSE</url>
+</issueManagement>
+
+<prerequisites>
+  <maven>${maven.version}</maven>
+</prerequisites>
+
+<modules>
+  <module>MLLib</module>  
+  <module>TimeSeriesAnalytics</module>
+  <module>TSFeatures</module>
+  <module>SequenceFileDriver</module>
+  
+  <!-- Netlib is the java interface to BLAS - it sits underneath Breeze.  It's a research project to understand this module and install our own BLAS -->
+  <!-- <module>NetlibDriver</module> -->
+
+  <!-- We don't include this yet until the archetype is configured to use the parent pom -->
+  <!--  <module>DSApp</module> -->
+
+  <!-- We deploy the UDAF to Data Lake so it gets it's own pom -->
+  <!-- <module>FeatureUDAF</module>  -->
+
+</modules>
+
+<properties>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  <java.version>1.7</java.version>
+  <maven.version>3.3.9</maven.version>
+  <sbt.project.name>timeSeriesEngine</sbt.project.name>
+  <slf4j.version>1.7.16</slf4j.version>
+  <log4j.version>1.2.17</log4j.version>
+  <hadoop.version>2.2.0</hadoop.version>
+  <hadoop.client.version>2.7.0</hadoop.client.version>
+  <protobuf.version>2.5.0</protobuf.version>
+  <yarn.version>${hadoop.version}</yarn.version>
+  <zookeeper.version>3.4.5</zookeeper.version>
+  <hive.version.short>1.2.1</hive.version.short>
+  <parquet.version>1.7.0</parquet.version>
+  <avro.version>1.7.7</avro.version>
+  <commons.httpclient.version>4.5.2</commons.httpclient.version>
+  <commons.math3.version>3.4.1</commons.math3.version>
+  <commons.collections.version>3.2.2</commons.collections.version>
+  <scala.version>2.11.8</scala.version>
+  <scala.binary.version>2.11</scala.binary.version>
+  <snappy.version>1.1.2.4</snappy.version>
+  <netlib.java.version>1.1.2</netlib.java.version>
+  <commons-codec.version>1.10</commons-codec.version>
+  <commons-io.version>2.4</commons-io.version>
+  <commons-lang2.version>2.6</commons-lang2.version>
+  <commons-lang3.version>3.3.2</commons-lang3.version>
+  <libthrift.version>0.9.2</libthrift.version>
+  <test.java.home>${java.home}</test.java.home>
+
+  <PermGen>64m</PermGen>
+  <MaxPermGen>512m</MaxPermGen>
+  <CodeCacheSize>512m</CodeCacheSize>
+</properties>
+<build>
+  <sourceDirectory>src/main/scala</sourceDirectory>
+  <testSourceDirectory>src/test/scala</testSourceDirectory>
+  <plugins>
+
+    <plugin>
+      <groupId>net.alchim31.maven</groupId>
+      <artifactId>scala-maven-plugin</artifactId>
+      <version>3.2.0</version>
+      <executions>
+        <execution>
+          <goals>
+            <goal>compile</goal>
+            <goal>testCompile</goal>
+          </goals>
+          <configuration>
+            <args>
+              <arg>-dependencyfile</arg>
+              <arg>${project.build.directory}/.scala_dependencies</arg>
+            </args>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-shade-plugin</artifactId>
+      <version>2.4.2</version>
+      <configuration>
+       <filters>
+        <filter>
+          <!-- filter out signature files from signed dependencies, else repackaging fails with security exception -->
+          <artifact>*:*</artifact>
+          <excludes>
+            <exclude>META-INF/*.SF</exclude>
+            <exclude>META-INF/*.DSA</exclude>
+            <exclude>META-INF/*.RSA</exclude>
+          </excludes>
+        </filter>
+      </filters>
+    </configuration>
+    <executions>
+      <execution>
+        <phase>package</phase>
+        <goals>
+          <goal>shade</goal>
+        </goals>
+      </execution>
+    </executions>
+  </plugin>
+
+  <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>2.18.1</version>
+       <!--  <configuration>
+          <useFile>false</useFile>
+          <disableXmlReport>false</disableXmlReport>
+          <includes>
+            <include>**/*Test.*</include>
+            <include>**/*Suite.*</include>
+          </includes>
+          <filters>
+            <filter>
+              <artifact>*:*</artifact>
+              <excludes>
+                <exclude>META-INF/*.SF</exclude>
+                <exclude>META-INF/*.DSA</exclude>
+                <exclude>META-INF/*.RSA</exclude>
+              </excludes>
+            </filter>
+          </filters>
+        </configuration> -->
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project>
